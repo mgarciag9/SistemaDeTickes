@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Tickets</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="font-sans bg-gray-100 m-0 p-0">
+    {% include 'components/navbar.html' %}
+
+    <div class="container mx-auto mt-10 px-4">
+      <h1 class="text-center text-3xl font-bold text-gray-800">Tickets</h1>
+
+      {% if messages %}
+      <div class="max-w-lg mx-auto mt-5">
+        {% for message in messages %}
+        <div class="p-4 mb-4 text-sm {{ message.tags }} border rounded-lg" role="alert">
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <form
+        method="get"
+        action="{% url 'buscar_ticket' %}"
+        class="flex items-center border border-gray-300 rounded-lg overflow-hidden max-w-lg mx-auto mt-10 shadow-md"
+      >
+        <select id="criterio" class="p-2 border-r outline-none text-gray-700" name="criterio">
+          <option value="nombre">Nombre</option>
+          <option value="apellidos">Apellidos</option>
+          <option value="edad">Edad</option>
+          <option value="dni">DNI</option>
+        </select>
+        <input
+          type="text"
+          name="valor"
+          class="flex-grow p-2 border-none outline-none"
+          placeholder="Buscar..."
+        />
+        <button type="submit" class="bg-yellow-500 p-2 flex items-center justify-center">
+          <i class="fas fa-search text-white"></i>
+        </button>
+      </form>
+
+      <div class="ticket-list flex flex-wrap justify-center mt-10">
+        {% for ticket in tickets %}
+        <div
+          class="ticket-card bg-white border border-gray-200 rounded-xl shadow-lg m-4 p-6 w-80 transform transition-all hover:scale-105 hover:shadow-2xl"
+        >
+          <div class="flex items-center mb-4">
+            <div
+              class="bg-gray-200 rounded-full h-10 w-10 flex items-center justify-center text-gray-700 font-bold"
+            >
+              {{ ticket.nombre|slice:":1" }}{{ ticket.apellidos|slice:":1" }}
+            </div>
+            <h2 class="ml-4 text-xl font-semibold text-gray-800">
+              {{ ticket.nombre }} {{ ticket.apellidos }}
+            </h2>
+          </div>
+          <div class="text-gray-600 space-y-2">
+            <p><span class="font-medium">ID:</span> {{ ticket.id }}</p>
+            <p><span class="font-medium">Edad:</span> {{ ticket.edad }}</p>
+            <p><span class="font-medium">DNI:</span> {{ ticket.dni }}</p>
+            <p><span class="font-medium">Descripción:</span> {{ ticket.descripcion }}</p>
+            <p><span class="font-medium">Creado en:</span> {{ ticket.creado_en }}</p>
+          </div>
+          {% if not ticket.atendido_en %}
+          <form action="{% url 'atender_ticket' ticket.id %}" method="post" class="mt-4">
+            {% csrf_token %}
+            <button
+              class="bg-green-600 text-white py-2 px-4 rounded-lg w-full hover:bg-green-700 transition-colors"
+              type="submit"
+            >
+              Atender Ticket
+            </button>
+          </form>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe Tickets</title>
+    <style>
+        /* Incluye los estilos de Bootstrap directamente */
+        /* Puedes copiar el contenido de https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css aquí */
+        /* Solo una parte de los estilos se incluye a continuación como ejemplo */
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        .mt-5 {
+            margin-top: 3rem !important;
+        }
+        .mb-4 {
+            margin-bottom: 1.5rem !important;
+        }
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: #212529;
+            border-collapse: collapse;
+        }
+        .table-bordered {
+            border: 1px solid #dee2e6;
+        }
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #dee2e6;
+        }
+        .thead-dark th {
+            color: #fff;
+            background-color: #343a40;
+            border-color: #454d55;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Informe Tickets</h2>
+        <h3 class="mb-4">Cantidad Tickets: {{ count }}</h3>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>#</th>
+                    <th>DNI</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                    <tr>
+                        <td>{{ ticket.id }}</td>
+                        <td>{{ ticket.dni }}</td>
+                        <td>{{ ticket.nombre }}</td>
+                        <td>{{ ticket.apellidos }}</td>
+                        <td>
+                            {% if ticket.atendido_en %}
+                                Atendido
+                            {% else %}
+                                No Atendido
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

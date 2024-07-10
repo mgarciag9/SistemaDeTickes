@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tickets Atendidos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="font-sans bg-gray-100 m-0 p-0">
+    {% include 'components/navbar.html' %}
+    <div class="container mx-auto py-8">
+        <h1 class="text-center mt-10 text-3xl font-bold text-gray-800">Tickets Atendidos</h1>
+        <div class="flex justify-center mt-10">
+            <div class="relative z-50">
+                <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400" id="dropdownButton">
+                    Ordenar por
+                </button>
+                <div id="dropdownMenu" class="hidden absolute bg-white border border-gray-300 rounded-md mt-2 py-2 w-48 z-50">
+                    <a href="?orden=nombre&direccion={% if orden == 'nombre' and direccion == 'asc' %}desc{% else %}asc{% endif %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Nombre</a>
+                    <a href="?orden=edad&direccion={% if orden == 'edad' and direccion == 'asc' %}desc{% else %}asc{% endif %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Edad</a>
+                    <a href="?orden=creado_en&direccion={% if orden == 'creado_en' and direccion == 'asc' %}desc{% else %}asc{% endif %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Fecha de Creación</a>
+                    <a href="?orden=atendido_en&direccion={% if orden == 'atendido_en' and direccion == 'asc' %}desc{% else %}asc{% endif %}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Fecha de Atención</a>
+                </div>
+            </div>
+        </div>
+        <div class="ticket-list flex flex-wrap justify-center mt-10">
+            {% for ticket in tickets %}
+            <div class="ticket-card bg-white border border-gray-200 rounded-xl shadow-lg m-4 p-6 w-80 transform transition-all hover:scale-105 hover:shadow-2xl z-10">
+                <div class="flex items-center mb-4">
+                    <div class="bg-gray-200 rounded-full h-10 w-10 flex items-center justify-center text-gray-700 font-bold">
+                        {{ ticket.nombre|slice:":1" }}{{ ticket.apellidos|slice:":1" }}
+                    </div>
+                    <h2 class="ml-4 text-xl font-semibold text-gray-800">
+                        {{ ticket.nombre }} {{ ticket.apellidos }}
+                    </h2>
+                </div>
+                <div class="text-gray-600 space-y-2">
+                    <p><span class="font-medium">ID:</span> {{ ticket.id }}</p>
+                    <p><span class="font-medium">Edad:</span> {{ ticket.edad }}</p>
+                    <p><span class="font-medium">DNI:</span> {{ ticket.dni }}</p>
+                    <p><span class="font-medium">Descripción:</span> {{ ticket.descripcion }}</p>
+                    <p><span class="font-medium">Creado en:</span> {{ ticket.creado_en }}</p>
+                    <p><span class="font-medium">Atendido en:</span> {{ ticket.atendido_en }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        const dropdownButton = document.getElementById('dropdownButton');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+
+        dropdownButton.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('hidden');
+        });
+
+        window.addEventListener('click', (e) => {
+            if (!dropdownButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                dropdownMenu.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
